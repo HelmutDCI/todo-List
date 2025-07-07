@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>To‑Do‑Board im Jira-Stil</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background-color: #f4f5f7;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .board {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .board h1 {
+      text-align: center;
+      color: #172b4d;
+    }
+
+    .task-input {
+      display: flex;
+      margin-bottom: 1rem;
+      gap: 0.5rem;
+    }
+
+    #new-task {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    #add-btn {
+      padding: 0.75rem 1.2rem;
+      background-color: #0052cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #add-btn:hover {
+      background-color: #0065ff;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .task-card {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid #0052cc;
+      transition: background-color 0.3s;
+    }
+
+    .task-card.done {
+      background-color: #e3fcef;
+      border-left-color: #36b37e;
+    }
+
+    .task-card span {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .task-card span.done {
+      text-decoration: line-through;
+      color: #5e6c84;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #a5adba;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      color: #ff5630;
+    }
+  </style>
+</head>
+<body>
+  <div class="board">
+    <h1>Mein Aufgabenboard</h1>
+    <div class="task-input">
+      <input type="text" id="new-task" placeholder="Neue Aufgabe hinzufügen...">
+      <button id="add-btn">+ Hinzufügen</button>
+    </div>
+    <div id="task-list" class="task-list">
+      <!-- Aufgaben erscheinen hier -->
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('new-task');
+    const addBtn = document.getElementById('add-btn');
+    const list = document.getElementById('task-list');
+
+    addBtn.addEventListener('click', addTask);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    function addTask() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      const card = document.createElement('div');
+      card.className = 'task-card';
+
+      const span = document.createElement('span');
+      span.textContent = text;
+      span.addEventListener('click', () => {
+        span.classList.toggle('done');
+        card.classList.toggle('done');
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.textContent = '🗑️';
+      delBtn.addEventListener('click', () => {
+        list.removeChild(card);
+      });
+
+      card.appendChild(span);
+      card.appendChild(delBtn);
+      list.appendChild(card);
+
+      input.value = '';
+      input.focus();
+    }
+  </script>
+</body>
+</html>
